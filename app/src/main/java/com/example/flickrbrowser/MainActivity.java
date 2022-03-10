@@ -19,7 +19,7 @@ import com.example.flickrbrowser.databinding.ActivityMainBinding;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements GetRawData.OnDownloadComplete  {
     private static final String TAG = "MainActivity";
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
+        GetRawData getRawData = new GetRawData(this);
+        getRawData.execute("https://www.flickr.com/services/feeds/photos_public.gne?tags=android,ios&tagmode=any&format=json&nojsoncallback=1");
 
         Log.d(TAG, "onCreate: Ends");
 
@@ -72,4 +74,15 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+    public void onDownloadComplete(String data ,DownloadStatus status){
+        if(status == DownloadStatus.OK){
+            Log.d(TAG, "OnDownloadComplete: data is "+ data);
+
+        }else{
+            Log.d(TAG, "OnDownloadComplete: failed with status: "+ status);
+        }
+
+    }
+
+
 }
