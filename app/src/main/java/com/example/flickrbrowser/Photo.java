@@ -1,6 +1,6 @@
 package com.example.flickrbrowser;
 
-public class Photo {
+class Photo {
     //simple class to get the image
     private String mTitle;
     private String mAuthor;
@@ -36,9 +36,7 @@ public class Photo {
         return mTags;
     }
 
-    public String getImage() {
-        return mImage;
-    }
+    public String getImage() { return mImage; }
 
     public String getPublishedDate() {
         return mPublishedDate;
