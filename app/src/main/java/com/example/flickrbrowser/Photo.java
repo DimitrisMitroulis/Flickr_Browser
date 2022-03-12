@@ -5,19 +5,29 @@ class Photo {
     private String mTitle;
     private String mAuthor;
     private String mAuthorId;
+    private String mLink;
     private String mTags;
     private String mImage;
     private String mPublishedDate;
     private String mDescription;
 
-    public Photo(String title, String author, String authorId, String tags, String image, String publishedDate, String description) {
+    public Photo(String title, String author, String authorId,String link, String tags, String image, String publishedDate, String description) {
         mTitle = title;
         mAuthor = author;
         mAuthorId = authorId;
+        mLink = link;
         mTags = tags;
         mImage = image;
         mPublishedDate = publishedDate;
         mDescription = description;
+    }
+
+    public String getLink() {
+        return mLink;
+    }
+
+    public void setLink(String link) {
+        mLink = link;
     }
 
     public String getTitle() {
