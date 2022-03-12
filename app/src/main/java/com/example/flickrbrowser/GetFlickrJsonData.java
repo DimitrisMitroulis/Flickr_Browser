@@ -15,15 +15,15 @@ class GetFlickrJsonData implements GetRawData.OnDownloadComplete {
 
     @Override
     public void onDownloadComplete(String data, DownloadStatus status) {
-        Log.d(TAG, "onDownloadComplete: Status = "+ status);
+        Log.d(TAG, "onDownloadComplete: Status = " + status);
 
-        if(status == DownloadStatus.OK){
+        if (status == DownloadStatus.OK) {
             mPhotoList = new ArrayList<>();
-            try{
+            try {
                 JSONObject jsonData = new JSONObject(data);
                 JSONArray itemsArray = jsonData.getJSONArray("items");
 
-                for (int i = 0; i<itemsArray.length(); i++){
+                for (int i = 0; i < itemsArray.length(); i++) {
                     JSONObject jsonPhoto = itemsArray.getJSONObject(i);
                     String title = jsonPhoto.getString("title");
                     String author = jsonPhoto.getString("author");
@@ -37,19 +37,25 @@ class GetFlickrJsonData implements GetRawData.OnDownloadComplete {
 
                     String link = photoUrl.replaceFirst("_m.", "_b.");//change the photo url to change it's size to b(big)
 
-                    Photo photoObject = new Photo(title,author,authorid,link,tags,photoUrl,date,description);
+                    Photo photoObject = new Photo(title, author, authorid, link, tags, photoUrl, date, description);
                     mPhotoList.add(photoObject);
 
-                    Log.d(TAG, "onDownloadComplete: " +photoObject.toString());
+                    Log.d(TAG, "onDownloadComplete: " + photoObject.toString());
 
                 }
 
-            }catch(JSONException jsone){
+            } catch (JSONException jsone) {
                 jsone.printStackTrace();
 
-                Log.d(TAG, "onDownloadComplete: Exception" +jsone.getMessage());
+                Log.d(TAG, "onDownloadComplete: Exception" + jsone.getMessage());
                 status = DownloadStatus.FAILED_OR_EMPTY;
             }
+        }
+
+        if (mCallBack != null) {
+            ///no inform the caller that processing is done- possibly returning null if there
+            //was an error
+            mCallBack.onDataAvailable(mPhotoList, status);
         }
     }
 
@@ -60,12 +66,12 @@ class GetFlickrJsonData implements GetRawData.OnDownloadComplete {
 
     private final OnDataAvailable mCallBack;
 
-    interface OnDataAvailable{
+    interface OnDataAvailable {
         void onDataAvailable(List<Photo> data, DownloadStatus status);
 
     }
 
-    public GetFlickrJsonData(OnDataAvailable callBack, String language, String baseUrl, boolean matchAll)  {
+    public GetFlickrJsonData(OnDataAvailable callBack, String language, String baseUrl, boolean matchAll) {
         Log.d(TAG, "GetFlickrJsonData called");
         mBaseUrl = baseUrl;
         mLanguage = language;
@@ -73,23 +79,23 @@ class GetFlickrJsonData implements GetRawData.OnDownloadComplete {
         mCallBack = callBack;
     }
 
-    void executeOnSameThread(String searchCriteria){
+    void executeOnSameThread(String searchCriteria) {
         Log.d(TAG, "excecuteOnSameThread: starts ");
-        String destinationUrl = createUri(searchCriteria, mLanguage , mMatchAll);
+        String destinationUrl = createUri(searchCriteria, mLanguage, mMatchAll);
 
         GetRawData getRawData = new GetRawData(this);
         getRawData.execute(destinationUrl);
         Log.d(TAG, "excecuteOnSameThread: ends");
     }
 
-    private String createUri(String searchCriteria, String lang, boolean matchAll){
+    private String createUri(String searchCriteria, String lang, boolean matchAll) {
         Log.d(TAG, "createUri: starts");
 
         return Uri.parse(mBaseUrl).buildUpon()
-                .appendQueryParameter("tags",searchCriteria)
-                .appendQueryParameter("tagmode",matchAll ? "ALL": "ANY")
-                .appendQueryParameter("lang",lang)
-                .appendQueryParameter("format",lang)
+                .appendQueryParameter("tags", searchCriteria)
+                .appendQueryParameter("tagmode", matchAll ? "ALL" : "ANY")
+                .appendQueryParameter("lang", lang)
+                .appendQueryParameter("format", lang)
                 .appendQueryParameter("nojsoncallback", "1")
                 .build().toString();
 

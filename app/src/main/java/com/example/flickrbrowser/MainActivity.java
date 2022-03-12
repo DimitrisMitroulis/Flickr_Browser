@@ -19,7 +19,9 @@ import com.example.flickrbrowser.databinding.ActivityMainBinding;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity implements GetRawData.OnDownloadComplete  {
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity implements GetFlickrJsonData.OnDataAvailable  {
     private static final String TAG = "MainActivity";
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
@@ -38,10 +40,19 @@ public class MainActivity extends AppCompatActivity implements GetRawData.OnDown
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
-        GetRawData getRawData = new GetRawData(this);
-        getRawData.execute("https://www.flickr.com/services/feeds/photos_public.gne?tags=android,ios&tagmode=any&format=json&nojsoncallback=1");
+        //GetRawData getRawData = new GetRawData(this);
+        //getRawData.execute("https://www.flickr.com/services/feeds/photos_public.gne?tags=android,ios&tagmode=any&format=json&nojsoncallback=1");
 
         Log.d(TAG, "onCreate: Ends");
+
+    }
+
+    @Override
+    protected void onPostResume() {
+        Log.d(TAG, "onPostResume: starts");
+        super.onPostResume();
+        GetFlickrJsonData getFlickrJsonData = new GetFlickrJsonData(this,"https://www.flickr.com/services/feeds/photos_public.gne","en-us",true);
+        getFlickrJsonData.executeOnSameThread("android, nougat");
 
     }
 
@@ -74,12 +85,13 @@ public class MainActivity extends AppCompatActivity implements GetRawData.OnDown
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
     }
-    public void onDownloadComplete(String data ,DownloadStatus status){
+
+    public void onDataAvailable(List<Photo> data , DownloadStatus status){
         if(status == DownloadStatus.OK){
-            Log.d(TAG, "OnDownloadComplete: data is "+ data);
+            Log.d(TAG, "onDataAvailable: data is "+ data);
 
         }else{
-            Log.d(TAG, "OnDownloadComplete: failed with status: "+ status);
+            Log.d(TAG, "onDataAvailable: failed with status: "+ status);
         }
 
     }
