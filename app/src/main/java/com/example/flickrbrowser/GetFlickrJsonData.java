@@ -1,6 +1,7 @@
 package com.example.flickrbrowser;
 
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -10,8 +11,31 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-class GetFlickrJsonData implements GetRawData.OnDownloadComplete {
+class GetFlickrJsonData extends AsyncTask<String, Void, List<Photo>> implements GetRawData.OnDownloadComplete {
+    //String containing query , Void because we won't implement progress bar, We will be returning list of photos
     private static final String TAG = "GetFlickrJsonData";
+
+    @Override//requires to be implemented with async task
+    protected List<Photo> doInBackground(String... params) {
+        Log.d(TAG, "doInBackground: starts");
+        String destinationUri = createUri(params[0], mLanguage, mMatchAll);
+        
+        GetRawData getRawData = new GetRawData(this);
+        getRawData.runInSameThread(destinationUri);//not using execute so as not to run in a new thread
+        Log.d(TAG, "doInBackground: ends");
+        return mPhotoList;
+    }
+
+    @Override
+    protected void onPostExecute(List<Photo> photos) {
+        //called after onDownloadComplete
+        // we need the mcallBack here as well cause onDownloadComplete is running on a different thread
+        Log.d(TAG, "onPostExecute: starts");
+        if(mCallBack != null ){
+            mCallBack.onDataAvailable(mPhotoList, DownloadStatus.OK);
+        }
+        Log.d(TAG, "onPostExecute: ends");
+    }
 
     @Override
     public void onDownloadComplete(String data, DownloadStatus status) {

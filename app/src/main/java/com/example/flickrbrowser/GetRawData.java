@@ -30,6 +30,16 @@ class GetRawData extends AsyncTask<String, Void, String> {
         mCallback = callback;
 
     }
+    void runInSameThread(String s){
+        //when you call .execute method from async task it creates
+        //a new thread and doInBackground method, then onPost execute is called on main thread
+
+        Log.d(TAG, "runInSameThread: starts");
+
+        onPostExecute(doInBackground(s));
+
+        Log.d(TAG, "runInSameThread: ends");
+    }
 
     @Override
     protected void onPostExecute(String s) {
@@ -95,4 +105,7 @@ class GetRawData extends AsyncTask<String, Void, String> {
         mDownloadStatus = DownloadStatus.FAILED_OR_EMPTY;
         return null;
     }
+        
+
+
 }
