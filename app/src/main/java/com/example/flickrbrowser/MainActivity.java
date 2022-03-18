@@ -36,9 +36,9 @@ public class MainActivity extends AppCompatActivity implements GetFlickrJsonData
 
         setSupportActionBar(binding.toolbar);
 
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        //NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+        //appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
+        //NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
         //GetRawData getRawData = new GetRawData(this);
         //getRawData.execute("https://www.flickr.com/services/feeds/photos_public.gne?tags=android,ios&tagmode=any&format=json&nojsoncallback=1");
@@ -79,12 +79,12 @@ public class MainActivity extends AppCompatActivity implements GetFlickrJsonData
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        return NavigationUI.navigateUp(navController, appBarConfiguration)
-                || super.onSupportNavigateUp();
-    }
+//    @Override
+//    public boolean onSupportNavigateUp() {
+//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+//        return NavigationUI.navigateUp(navController, appBarConfiguration)
+//                || super.onSupportNavigateUp();
+//    }
 
     public void onDataAvailable(List<Photo> data , DownloadStatus status){
         if(status == DownloadStatus.OK){

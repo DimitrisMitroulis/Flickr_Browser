@@ -47,7 +47,7 @@ class GetFlickrJsonData extends AsyncTask<String, Void, List<Photo>> implements 
     protected void onPostExecute(List<Photo> photos) {
         Log.d(TAG, "onPostExecute starts");
 
-        if(mCallBack != null) {
+        if (mCallBack != null) {
             mCallBack.onDataAvailable(mPhotoList, DownloadStatus.OK);
         }
         Log.d(TAG, "onPostExecute ends");
@@ -80,14 +80,14 @@ class GetFlickrJsonData extends AsyncTask<String, Void, List<Photo>> implements 
     public void onDownloadComplete(String data, DownloadStatus status) {
         Log.d(TAG, "onDownloadComplete starts. Status = " + status);
 
-        if(status == DownloadStatus.OK) {
+        if (status == DownloadStatus.OK) {
             mPhotoList = new ArrayList<>();
 
             try {
                 JSONObject jsonData = new JSONObject(data);
                 JSONArray itemsArray = jsonData.getJSONArray("items");
 
-                for(int i=0; i<itemsArray.length(); i++) {
+                for (int i = 0; i < itemsArray.length(); i++) {
                     JSONObject jsonPhoto = itemsArray.getJSONObject(i);
                     String title = jsonPhoto.getString("title");
                     String author = jsonPhoto.getString("author");
@@ -104,14 +104,14 @@ class GetFlickrJsonData extends AsyncTask<String, Void, List<Photo>> implements 
 
                     Log.d(TAG, "onDownloadComplete " + photoObject.toString());
                 }
-            } catch(JSONException jsone) {
+            } catch (JSONException jsone) {
                 jsone.printStackTrace();
                 Log.e(TAG, "onDownloadComplete: Error processing Json data " + jsone.getMessage());
                 status = DownloadStatus.FAILED_OR_EMPTY;
             }
         }
 
-        if(runningOnSameThread && mCallBack != null) {
+        if (runningOnSameThread && mCallBack != null) {
             // now inform the caller that processing is done - possibly returning null if there
             // was an error
             mCallBack.onDataAvailable(mPhotoList, status);
@@ -120,4 +120,3 @@ class GetFlickrJsonData extends AsyncTask<String, Void, List<Photo>> implements 
         Log.d(TAG, "onDownloadComplete ends");
     }
 }
-
