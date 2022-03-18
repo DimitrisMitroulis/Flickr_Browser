@@ -14,9 +14,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 enum DownloadStatus { IDLE, PROCESSING, NOT_INITIALISED, FAILED_OR_EMPTY, OK }
 
-/**
- * Created by timbuchalka on 4/08/2016.
- */
+
 
 class GetRawData extends AsyncTask<String, Void, String> {
     private static final String TAG = "GetRawData";
