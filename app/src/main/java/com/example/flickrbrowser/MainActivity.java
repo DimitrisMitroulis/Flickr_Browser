@@ -21,7 +21,7 @@ import android.view.MenuItem;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements GetFlickrJsonData.OnDataAvailable  {
+public class MainActivity extends AppCompatActivity implements GetFlickrJsonData.OnDataAvailable {
     private static final String TAG = "MainActivity";
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements GetFlickrJsonData
     protected void onPostResume() {
         Log.d(TAG, "onPostResume: starts");
         super.onPostResume();
-        GetFlickrJsonData getFlickrJsonData = new GetFlickrJsonData(this,"https://www.flickr.com/services/feeds/photos_public.gne","en-us",true);
+        GetFlickrJsonData getFlickrJsonData = new GetFlickrJsonData(this, "https://www.flickr.com/services/feeds/photos_public.gne", "en-us", true);
         getFlickrJsonData.executeOnSameThread("android, nougat");
 
     }
@@ -86,12 +86,12 @@ public class MainActivity extends AppCompatActivity implements GetFlickrJsonData
 //                || super.onSupportNavigateUp();
 //    }
 
-    public void onDataAvailable(List<Photo> data , DownloadStatus status){
-        if(status == DownloadStatus.OK){
-            Log.d(TAG, "onDataAvailable: data is "+ data);
+    public void onDataAvailable(List<Photo> data, DownloadStatus status) {
+        if (status == DownloadStatus.OK) {
+            Log.d(TAG, "onDataAvailable: data is " + data);
 
-        }else{
-            Log.d(TAG, "onDataAvailable: failed with status: "+ status);
+        } else {
+            Log.d(TAG, "onDataAvailable: failed with status: " + status);
         }
 
     }

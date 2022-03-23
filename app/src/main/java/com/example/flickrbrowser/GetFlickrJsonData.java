@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
 class GetFlickrJsonData extends AsyncTask<String, Void, List<Photo>> implements GetRawData.OnDownloadComplete {
     private static final String TAG = "GetFlickrJsonData";
 
@@ -31,6 +32,7 @@ class GetFlickrJsonData extends AsyncTask<String, Void, List<Photo>> implements 
         mCallBack = callBack;
         mLanguage = language;
         mMatchAll = matchAll;
+
     }
 
     void executeOnSameThread(String searchCriteria) {
